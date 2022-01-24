@@ -44,6 +44,7 @@ class Form(val nombre:String):JFrame(){
             if (puerto.isNotBlank()){
                 connectarArduino()
                 Thread.sleep(1500)
+                JOptionPane.showMessageDialog(this, "Conectado correctamente", "Arduino",  JOptionPane.PLAIN_MESSAGE)
                 jList.isEnabled = false
                 connectar.isEnabled = false
             }
@@ -68,11 +69,7 @@ class Form(val nombre:String):JFrame(){
 
         jList.addListSelectionListener {
             var valores = jList.selectedValuesList
-            for (valor in valores){
-                println(valor)
-                this.puerto = valor
-            }
-
+            valores.forEach { this.puerto = it }
         }
 
 
@@ -80,7 +77,10 @@ class Form(val nombre:String):JFrame(){
         var enviar = JButton("Enviar Texto")
 
         enviar.addActionListener {
-            if (serialPort.isOpened) serialPort.writeString(texto.text)
+            if (serialPort.isOpened){
+                serialPort.writeString(texto.text)
+                texto.text = ""
+            }
             else JOptionPane.
             showMessageDialog(
                 this,
